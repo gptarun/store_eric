@@ -1,4 +1,27 @@
 .match-parent {
-    width: 100%;
-    height: 750px;
-  }
+  width: 100%;
+  height: 750px;
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+
+#sidebar {
+  width: 350px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 999;
+  background: #fff;
+  color: #fff;
+  transition: all 0.3s;
+  border-right: outset;
+}
+
+.sidebar-header{
+  background: seagreen;
+  height: 60px;
+}

@@ -1,1 +1,32 @@
-<div class="map" id="map" class="match-parent"></div>
+<pre style="text-align: center;" id='info'></pre>
+<!-- ========== Left Sidebar Start ========== -->
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h4>Our locations</h4>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <button (click)="navigateStore(-122.41201702117905,37.77487528422509)">Location 1</button>
+            </li>
+            <li>
+                <button (click)="navigateStore(-122.4204713439945,37.80021693867869)">Location 2</button>
+            </li>
+            <li>
+                <button (click)="navigateStore(-122.41201702117905,37.77487528422509)">Location 3</button>
+            </li>
+            <li>
+                <button (click)="navigateStore(-122.4204713439945,37.80021693867869)">Location 4</button>
+            </li>
+            <li>
+                <button (click)="navigateStore(-122.41201702117905,37.77487528422509)">Location 5</button>
+            </li>
+        </ul>
+
+    </nav>
+    <!-- Left Sidebar End -->
+    <!-- Page Content -->
+    <div class="map" id="map" class="match-parent" (contextmenu)="onRightClick(evt)"></div>
+</div>
