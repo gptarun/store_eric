@@ -12,7 +12,32 @@ export class MapComponent implements OnInit {
   style = 'mapbox://styles/accordifysolutions/ck39u6rml0j1w1cs2rvnghwv0';
   lat = 37.75;
   lng = -122.41;
-
+  geojson = [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-77.031952, 38.913184]
+      },
+      properties: {
+        'marker-color': '#3bb2d0',
+        'marker-size': 'large',
+        'marker-symbol': 'rocket'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-122.41, 37.75]
+      },
+      properties: {
+        'marker-color': '#3bb2d0',
+        'marker-size': 'large',
+        'marker-symbol': 'rocket'
+      }
+    }
+  ];
   constructor() { }
 
   ngOnInit() {
@@ -25,7 +50,8 @@ export class MapComponent implements OnInit {
     });
 
     // Add map controls
-    this.map.addControl(new mapboxgl.NavigationControl());    
+    this.map.addControl(new mapboxgl.NavigationControl());
+    mapboxgl.featureLayer(this.geojson).addTo(this.map);
   }
 
   navigateStore(longitude: any, latitude: any) {
