@@ -1,12 +1,46 @@
 <pre style="text-align: center;" id='info'></pre>
 <!-- ========== Left Sidebar Start ========== -->
 <div class="wrapper">
-    <!-- Sidebar -->
-    <nav id="sidebar">
+    <nav id="sidebar" class="navbar-nav bg-light">
         <div class="sidebar-header">
             <h4>Our locations</h4>
         </div>
+        <ul class="navbar-nav" *ngIf="!isAdd">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Location 1
+                    <p>Location Details</p></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Location 2
+                    <p>Location Details</p></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Location 3
+                    <p>Location Details</p></a>
+            </li>
+        </ul>
 
+        <ul class="navbar-nav" *ngIf="isAdd">
+            <li class="nav-item active">
+                <h5 style="color: seagreen;">Enter Store Details</h5>
+                <input type="text" class="form-control form-control" placeholder="Store Name">
+                <input type="text" class="form-control form-control" placeholder="Store Details">
+                <select class="form-control">
+                    <option> Select Category </option>
+                    <option> Category 1</option>
+                    <option> Category 2</option>
+                    <option> Category 3</option>
+                </select>
+                <p>X Coord: </p><input type="text" class="form-control form-control" id = "xcord">
+                <p>Y Coord: </p><input type="text" class="form-control form-control" id = "ycord">
+                <button type="button" class="btn btn-light" (click)="hideAdd()">Cancel</button>
+                <button type="button" class="btn btn-success">Add</button>
+            </li>
+        </ul>
+
+    </nav>
+    <!-- Sidebar 
+    <nav id="sidebar">
         <ul class="list-unstyled components">
             <li class="active">
                 <button (click)="navigateStore(-122.41201702117905,37.77487528422509)">Location 1</button>
@@ -26,7 +60,7 @@
         </ul>
 
     </nav>
-    <!-- Left Sidebar End -->
+     Left Sidebar End -->
     <!-- Page Content -->
-    <div class="map" id="map" class="match-parent" (contextmenu)="onRightClick(evt)"></div>
+    <div class="map" id="map" class="match-parent" (click)="addMarker()"></div>
 </div>
