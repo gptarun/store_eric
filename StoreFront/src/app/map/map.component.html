@@ -1,13 +1,13 @@
-<pre style="text-align: center;" id='info'></pre>
+<!-- <pre style="text-align: center;" id='info'></pre> -->
 <!-- ========== Left Sidebar Start ========== -->
 <div class="wrapper">
     <nav id="sidebar" class="navbar-nav bg-light">
         <div class="sidebar-header">
             <h4>Our locations</h4>
         </div>
-        <ul class="navbar-nav" *ngIf="!isAdd">
+        <ul class="navbar-nav" *ngIf="!isAdd  && !isEdit">
             <li class="nav-item" *ngFor="let item of response">
-                <button id="sidenavbutton" (click)="navigateStore(item.address)">
+                <button id="sidenavbutton" (click)="navigateStore(item.address)" (contextmenu)="onRightClick(item.id)">
                     <h5 style="color: seagreen;">{{item.storeName}}</h5>
                     <p>{{item.storeLocation}}</p>
                 </button>
@@ -30,6 +30,27 @@
                 <p>Y Coord: </p><input type="text" class="form-control form-control" id="ycord" [(ngModel)]="yvalue">
                 <button type="button" class="btn btn-light" (click)="hideAdd()">Cancel</button>
                 <button type="button" class="btn btn-success" (click)="saveMarker()">Add</button>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav" *ngIf="isEdit">
+            <li class="nav-item active">
+                <h5 style="color: seagreen;">Update the Store Details</h5>
+                <input type="text" class="form-control form-control" placeholder="Store Name" [(ngModel)]="storeName">
+                <input type="text" class="form-control form-control" placeholder="Store Details"
+                    [(ngModel)]="storeDetails">
+                <select class="form-control" [(ngModel)]="storeCategory">
+                    <option> Select Category </option>
+                    <option> Category1</option>
+                    <option> Category2</option>
+                    <option> Category3</option>
+                </select>
+                <p>X Coord: </p><input type="text" class="form-control form-control" id="xcord" [(ngModel)]="xvalue">
+                <p>Y Coord: </p><input type="text" class="form-control form-control" id="ycord" [(ngModel)]="yvalue">
+                <button type="button" class="btn btn-light" (click)="hideEdit()">Cancel</button>
+                <button type="button" class="btn btn-success"
+                    (click)="updateMarker(storeName,storeDetails,storeCategory,xvalue,yvalue,storeId)">Update</button>
+                <input type="hidden" [(ngModel)]="storeId">
             </li>
         </ul>
 

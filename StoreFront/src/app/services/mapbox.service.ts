@@ -12,6 +12,7 @@ export class MapboxService {
         mapboxgl.accessToken = environment.mapbox.accessToken;
     }
 
+    //This method is just for testing purpose
     getMarkers() {
         const geoJson = [{
             'type': 'Feature',
@@ -40,22 +41,46 @@ export class MapboxService {
         return this.http.get(environment.apiTarget + `/store/store/getAll`);
 
     }
-    saveMarker(uiName, uiDetails, uiCategory, xcord, ycord) {
+    saveMarker(uiName, uiDetails, uiCategory, xcord, ycord, storeId) {
 
-        var marker = {
-            "storeName": uiName,
-            "storeLocation": uiDetails,
-            "address": xcord + ',' + ycord,
-            "category": uiCategory
+        if (storeId != null) {
+            var marker = {
+                "storeName": uiName,
+                "storeLocation": uiDetails,
+                "address": xcord + ',' + ycord,
+                "category": uiCategory,
+                "id": storeId
+            }
+            this.http.post(environment.apiTarget + `/store/store/addStore`, marker).subscribe(
+                data => {
+                    console.log("PUT Request is successful ", data);
+                },
+                error => {
+                    console.log("Error", error);
+                }
+            );
+        } else {
+            var marker1 = {
+                "storeName": uiName,
+                "storeLocation": uiDetails,
+                "address": xcord + ',' + ycord,
+                "category": uiCategory
+            }
+            this.http.post(environment.apiTarget + `/store/store/addStore`, marker1).subscribe(
+                data => {
+                    console.log("PUT Request is successful ", data);
+                },
+                error => {
+                    console.log("Error", error);
+                }
+            );
         }
 
-        this.http.post(environment.apiTarget + `/store/store/addStore`, marker).subscribe(
-            data => {
-                console.log("PUT Request is successful ", data);                
-            },
-            error => {
-                console.log("Error", error);
-            }
-        );;
+
+
+    }
+
+    getMarkerById(uiId: any) {
+        return this.http.get(environment.apiTarget + `/store/store/` + uiId);
     }
 }

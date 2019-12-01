@@ -21,6 +21,7 @@ export class MapComponent implements OnInit {
   storeName = '';
   storeDetails = '';
   storeCategory = '';
+  storeId = 0;
   response = {};
   markers = [];
   markerListLength = 0;
@@ -133,7 +134,30 @@ export class MapComponent implements OnInit {
 
 
   saveMarker() {
-    this.mapboxService.saveMarker(this.storeName, this.storeDetails, this.storeCategory, (<HTMLInputElement>document.getElementById('xcord')).value, (<HTMLInputElement>document.getElementById('ycord')).value);
+    this.mapboxService.saveMarker(this.storeName, this.storeDetails, this.storeCategory, (<HTMLInputElement>document.getElementById('xcord')).value, (<HTMLInputElement>document.getElementById('ycord')).value, null);
+    location.reload();
+  }
+
+  //This method is to edit or delete the store
+  onRightClick(uiId) {
+    this.isEdit = true;
+    this.mapboxService.getMarkerById(uiId).subscribe((responseData: any[]) => {
+      var coordinatesVal = responseData['address'].split(',');
+      this.xvalue = coordinatesVal[0];
+      this.yvalue = coordinatesVal[1];
+      this.storeName = responseData['storeName'];
+      this.storeCategory = responseData['category'];
+      this.storeDetails = responseData['storeLocation'];
+      this.storeId = responseData['id'];
+    });
+  }
+
+  hideEdit() {
+    this.isEdit = false;
+  }
+
+  updateMarker(uiStoreName, uiStoreDetails, uiStoreCategory, uiXvalue, uiYvalue, uiStoreId) {
+    this.mapboxService.saveMarker(uiStoreName, uiStoreDetails, uiStoreCategory, uiXvalue, uiYvalue, uiStoreId);
     location.reload();
   }
 
