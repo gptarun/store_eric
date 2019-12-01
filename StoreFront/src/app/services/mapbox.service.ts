@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import * as mapboxgl from 'mapbox-gl';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MapboxService {
 
-    constructor() {
+    constructor(private http: HttpClient) {
         mapboxgl.accessToken = environment.mapbox.accessToken;
     }
 
@@ -32,5 +33,29 @@ export class MapboxService {
             }
         }];
         return geoJson;
+    }
+
+
+    getMarkersAPI() {
+        return this.http.get(environment.apiTarget + `/store/store/getAll`);
+
+    }
+    saveMarker(uiName, uiDetails, uiCategory, xcord, ycord) {
+
+        var marker = {
+            "storeName": uiName,
+            "storeLocation": uiDetails,
+            "address": xcord + ',' + ycord,
+            "category": uiCategory
+        }
+
+        this.http.post(environment.apiTarget + `/store/store/addStore`, marker).subscribe(
+            data => {
+                console.log("PUT Request is successful ", data);                
+            },
+            error => {
+                console.log("Error", error);
+            }
+        );;
     }
 }

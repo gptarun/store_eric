@@ -16,8 +16,14 @@ export class MapComponent implements OnInit {
   lat = 12.990913150422628;
   lng = 77.58686444350997;
   newMarkerCoord = [];
-  xval = '';
-
+  xvalue = '';
+  yvalue = '';
+  storeName = '';
+  storeDetails = '';
+  storeCategory = '';
+  response = {};
+  markers = [];
+  markerListLength = 0;
   constructor(private mapboxService: MapboxService) { }
 
   ngOnInit() {
@@ -40,68 +46,76 @@ export class MapComponent implements OnInit {
           features: []
         }
       });
-      const markers = this.mapboxService.getMarkers();
-      const data = {
-        type: 'FeatureCollection',
-        features: markers
-      };
-      this.map.getSource('customMarker').setData(data);
 
-      this.map.addLayer({
-        id: 'customMarketid',
-        source: 'customMarker',
-        type: 'symbol',
-        layout: {
-          'text-field': '{message}',
-          'text-size': 10,
-          'text-transform': 'uppercase',
-          'icon-image': 'rocket-15',
-          'icon-size': 2,
-          'text-offset': [0, 1.5]
-        },
-        paint: {
-          'text-color': '#f16624',
-          'text-halo-color': '#fff',
-          'text-halo-width': 2
-        }
-      });
+      this.mapboxService.getMarkersAPI().subscribe((responseData: any[]) => {
+        this.response = responseData;
+        this.markerListLength = responseData.length;
+        this.markers = this.convertResponseToGeoSon(this.response);
+        const data = {
+          type: 'FeatureCollection',
+          features: this.markers
+        };
+        this.map.getSource('customMarker').setData(data);
+
+        this.map.addLayer({
+          id: 'customMarketid',
+          source: 'customMarker',
+          type: 'symbol',
+          layout: {
+            'text-field': '{message}',
+            'text-size': 10,
+            'text-transform': 'uppercase',
+            'icon-image': 'rocket-15',
+            'icon-size': 2,
+            'text-offset': [0, 1.5]
+          },
+          paint: {
+            'text-color': '#f16624',
+            'text-halo-color': '#fff',
+            'text-halo-width': 2
+          }
+        });
+      })
     });
   }
 
-  navigateStore(longitude: any, latitude: any) {
-    this.lng = longitude;
-    this.lat = latitude;
+  navigateStore(uiAddress) {
+    var address = uiAddress.split(',');
+    this.lng = address[0];
+    this.lat = address[1];
     this.map.flyTo({ center: [this.lng, this.lat] });
 
   }
   addMarker() {
     this.isAdd = true;
 
-    this.map.on('click', function (e) {      
+    this.map.on('click', function (e) {
       //console.log(e.lngLat.lng);
       //console.log(e.lngLat.lat);
-      document.getElementById('xcord').value = e.lngLat.lng;
-      document.getElementById('ycord').value = e.lngLat.lat;
+      (<HTMLInputElement>document.getElementById('xcord')).value = e.lngLat.lng;
+      (<HTMLInputElement>document.getElementById('ycord')).value = e.lngLat.lat;
+      this.xvalue = e.lngLat.lng;
       //+ JSON.stringify(e.point) + '<br />'
       //document.getElementById('info').innerHTML = e.lngLat;
     });
 
-    const markers = this.mapboxService.getMarkers();
-    //console.log(document.getElementById('xcord').value);
-    markers.push({
+    // removing newly added marker if user wants to change it location. If not remove then you will have multiple new location markers
+    if (this.markerListLength < this.markers.length) {
+      this.markers.splice(this.markers.length - 1, 1);
+    }
+    this.markers.push({
       'type': 'Feature',
       'geometry': {
         'type': 'Point',
-        'coordinates': [document.getElementById('xcord').value, document.getElementById('ycord').value],
+        'coordinates': [(<HTMLInputElement>document.getElementById('xcord')).value, (<HTMLInputElement>document.getElementById('ycord')).value]
       },
       'properties': {
-        'message': 'Location 3',
+        'message': 'New Store',
       }
     });
-    console.log(markers);
     const data = {
       type: 'FeatureCollection',
-      features: markers
+      features: this.markers
     };
     this.map.getSource('customMarker').setData(data);
 
@@ -109,7 +123,39 @@ export class MapComponent implements OnInit {
 
   hideAdd() {
     this.isAdd = false;
+    this.markers.splice(this.markers.length - 1, 1);
+    const data = {
+      type: 'FeatureCollection',
+      features: this.markers
+    };
+    this.map.getSource('customMarker').setData(data);
   }
+
+
+  saveMarker() {
+    this.mapboxService.saveMarker(this.storeName, this.storeDetails, this.storeCategory, (<HTMLInputElement>document.getElementById('xcord')).value, (<HTMLInputElement>document.getElementById('ycord')).value);
+    location.reload();
+  }
+
+  convertResponseToGeoSon(response) {
+    const element = []
+    for (let index = 0; index < response.length; index++) {
+      var coordinates = response[index].address.split(',');
+      element.push({
+        'type': 'Feature',
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [coordinates[0], coordinates[1]]
+        },
+        'properties': {
+          'message': response[index].storeName,
+        }
+      });
+      response[index];
+    }
+    return element;
+  }
+
 }
 
 export interface IGeometry {

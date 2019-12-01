@@ -4,9 +4,11 @@
 
 export const environment = {
   production: false,
+  apiTarget: 'http://localhost:8080',
   mapbox: {
     accessToken: 'pk.eyJ1IjoiYWNjb3JkaWZ5c29sdXRpb25zIiwiYSI6ImNrMzl0cDBhbDA2MWMzam14bmpubjBwc3oifQ.1zHszHXhy4YXzPUl-9T7kA'
   }
+  
 };
 
 

@@ -18,7 +18,7 @@ public class StoreService {
 	@Autowired
 	private StoreRepository storeRepository;
 	
-	public void addStore(String name,String location, String address, String catagory) {
+	public void newstore(String name,String location, String address, String catagory) {
 		Store store = new Store(null,name, location, address, Category.valueOf(catagory));
 		storeRepository.save(store);
 	}
@@ -45,5 +45,10 @@ public class StoreService {
 		}
 		
 		return stores;
+	}
+
+	public void addStore(Store store) {
+		storeRepository.save(store);
+		
 	}
 }
