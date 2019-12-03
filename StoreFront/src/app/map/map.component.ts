@@ -78,6 +78,15 @@ export class MapComponent implements OnInit {
         });
       })
     });
+    this.map.on('click', function (e) {
+      //console.log(e.lngLat.lng);
+      //console.log(e.lngLat.lat);
+      (<HTMLInputElement>document.getElementById('xcord')).value = e.lngLat.lng;
+      (<HTMLInputElement>document.getElementById('ycord')).value = e.lngLat.lat;
+      //+ JSON.stringify(e.point) + '<br />'
+      //document.getElementById('info').innerHTML = e.lngLat;
+    });
+
   }
 
   navigateStore(uiAddress) {
@@ -89,17 +98,6 @@ export class MapComponent implements OnInit {
   }
   addMarker() {
     this.isAdd = true;
-
-    this.map.on('click', function (e) {
-      //console.log(e.lngLat.lng);
-      //console.log(e.lngLat.lat);
-      (<HTMLInputElement>document.getElementById('xcord')).value = e.lngLat.lng;
-      (<HTMLInputElement>document.getElementById('ycord')).value = e.lngLat.lat;
-      this.xvalue = e.lngLat.lng;
-      //+ JSON.stringify(e.point) + '<br />'
-      //document.getElementById('info').innerHTML = e.lngLat;
-    });
-
     // removing newly added marker if user wants to change it location. If not remove then you will have multiple new location markers
     if (this.markerListLength < this.markers.length) {
       this.markers.splice(this.markers.length - 1, 1);
@@ -119,7 +117,6 @@ export class MapComponent implements OnInit {
       features: this.markers
     };
     this.map.getSource('customMarker').setData(data);
-
   }
 
   hideAdd() {
